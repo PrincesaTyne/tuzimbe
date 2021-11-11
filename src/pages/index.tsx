@@ -1,10 +1,12 @@
+import React, { useEffect } from "react";
 import { Button, makeStyles } from "@material-ui/core";
 import type { NextPage } from "next";
 import Sidebar from "../components/layout/Sidebar";
 import { Grid, Typography } from "@material-ui/core";
 import { BsClock, BsPaintBucket } from "react-icons/bs";
 import { Doughnut, Bar } from "react-chartjs-2";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -82,6 +84,57 @@ const useStyles = makeStyles(() => ({
 
 const Home: NextPage = () => {
   const classes = useStyles();
+  const [dailyCost, setDaily] = useState();
+  const [weeklyCost, setWeekly] = useState();
+  const [monthlyCost, setMonontly] = useState();
+
+  useEffect(() => {
+    monthlyCosts().then((res: any) => {
+      const data = res.data.data[0].monthlycost;
+      setMonontly(data);
+    });
+
+    weeklyCosts().then((res: any) => {
+      const data = res.data.data[0].weeklycost;
+      setWeekly(data);
+    });
+
+    dailyCosts().then((res: any) => {
+      const data = res.data.data[0].dailycost;
+      setDaily(data)
+    });
+  }, []);
+
+  const monthlyCosts = async () => {
+    try {
+      const data = await axios.get(
+        "http://localhost:3030/checkouts/monthly_material_cost"
+      );
+      return data;
+    } catch (err) {
+      return err;
+    }
+  };
+  const weeklyCosts = async () => {
+    try {
+      const data = await axios.get(
+        "http://localhost:3030/checkouts/weekly_material_cost"
+      );
+      return data;
+    } catch (err) {
+      return err;
+    }
+  };
+  const dailyCosts = async () => {
+    try {
+      const data = await axios.get(
+        "http://localhost:3030/checkouts/daily_material_cost"
+      );
+      return data;
+    } catch (err) {
+      return err;
+    }
+  };
 
   const dailyDetailedCosts = {
     labels: ["January", "February", "March", "April", "May"],
@@ -155,8 +208,6 @@ const Home: NextPage = () => {
     },
   };
 
-  
-
   return (
     <Sidebar>
       <Grid container className={classes.root}>
@@ -164,6 +215,7 @@ const Home: NextPage = () => {
           <Grid item xs={12} sm={6} lg={3}>
             <div className="card" id="clock-card">
               <Grid item xs={12}>
+                <Button onClick={() => monthlyCosts()}>yyyy</Button>
                 <BsClock color="red" size={50} />
               </Grid>
               <Grid item xs={12}>
@@ -181,9 +233,7 @@ const Home: NextPage = () => {
           <Grid item xs={12} sm={6} lg={3}>
             <div className="card">
               <Grid item xs={12}>
-                <Typography className="title">
-                  Contractor Attendance
-                </Typography>
+                <Typography className="title">Contractor Attendance</Typography>
               </Grid>
               <Grid item container xs={12}>
                 <Grid item container xs={12}>
@@ -219,9 +269,7 @@ const Home: NextPage = () => {
           <Grid item xs={12} sm={6} lg={3}>
             <div className="card">
               <Grid item xs={12}>
-                <Typography className="title">
-                  Materials Total Cost
-                </Typography>
+                <Typography className="title">Materials Total Cost</Typography>
               </Grid>
               <Grid item container xs={12}>
                 <Grid item container xs={12}>
@@ -229,7 +277,7 @@ const Home: NextPage = () => {
                     <Typography>Today:</Typography>
                   </Grid>
                   <Grid item xs={4} id="item2">
-                    <Typography>20%</Typography>
+                    <Typography>{`${dailyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
                 <Grid item container xs={12}>
@@ -237,7 +285,7 @@ const Home: NextPage = () => {
                     <Typography>This week:</Typography>
                   </Grid>
                   <Grid item xs={4} id="item2">
-                    <Typography>40%</Typography>
+                    <Typography>{`${weeklyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
                 <Grid item container xs={12}>
@@ -245,7 +293,7 @@ const Home: NextPage = () => {
                     <Typography>This month:</Typography>
                   </Grid>
                   <Grid item xs={4} id="item2">
-                    <Typography>30%</Typography>
+                    <Typography>{`${monthlyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
               </Grid>

@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <head>
         <title>tuzimbe</title>
-        <meta name="description" content="Musicology application" />
+        <meta name="description" content="Tuzimbe application" />
         {/* <link rel="icon" type="image/svg+xml" href="/images/logo.svg" /> */}
       </head>
       <ThemeProvider theme={theme}>
