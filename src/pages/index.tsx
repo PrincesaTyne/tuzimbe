@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
       padding: "4%",
     },
     "& #item1": {
-      paddingLeft: "15%",
+      paddingLeft: "10%",
     },
     "& #item2": {
       display: "flex",
@@ -215,7 +215,6 @@ const Home: NextPage = () => {
           <Grid item xs={12} sm={6} lg={3}>
             <div className="card" id="clock-card">
               <Grid item xs={12}>
-                <Button onClick={() => monthlyCosts()}>yyyy</Button>
                 <BsClock color="red" size={50} />
               </Grid>
               <Grid item xs={12}>
@@ -273,26 +272,26 @@ const Home: NextPage = () => {
               </Grid>
               <Grid item container xs={12}>
                 <Grid item container xs={12}>
-                  <Grid item xs={8} id="item1">
+                  <Grid item xs={7} id="item1">
                     <Typography>Today:</Typography>
                   </Grid>
-                  <Grid item xs={4} id="item2">
+                  <Grid item xs={5} id="item2">
                     <Typography>{`${dailyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
                 <Grid item container xs={12}>
-                  <Grid item xs={8} id="item1">
+                  <Grid item xs={7} id="item1">
                     <Typography>This week:</Typography>
                   </Grid>
-                  <Grid item xs={4} id="item2">
+                  <Grid item xs={5} id="item2">
                     <Typography>{`${weeklyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
                 <Grid item container xs={12}>
-                  <Grid item xs={8} id="item1">
+                  <Grid item xs={7} id="item1">
                     <Typography>This month:</Typography>
                   </Grid>
-                  <Grid item xs={4} id="item2">
+                  <Grid item xs={5} id="item2">
                     <Typography>{`${monthlyCost} shs`}</Typography>
                   </Grid>
                 </Grid>
