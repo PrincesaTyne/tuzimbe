@@ -6,7 +6,9 @@ import { Grid, Typography } from "@material-ui/core";
 import { BsClock, BsPaintBucket } from "react-icons/bs";
 import { Doughnut, Bar } from "react-chartjs-2";
 import { useMemo, useState } from "react";
-import axios from "axios";
+import monthlycost from './api/checkouts/monthlycost'
+import weeklycost from "./api/checkouts/weeklycost";
+import dailycost from "./api/checkouts/dailycost";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -84,57 +86,26 @@ const useStyles = makeStyles(() => ({
 
 const Home: NextPage = () => {
   const classes = useStyles();
-  const [dailyCost, setDaily] = useState();
-  const [weeklyCost, setWeekly] = useState();
-  const [monthlyCost, setMonontly] = useState();
+  const [dailyCost, setDailyCost] = useState<number>(0);
+  const [weeklyCost, setWeeklyCost] = useState<number>(0);
+  const [monthlyCost, setMonthlyCost] = useState<number>(0);
 
   useEffect(() => {
-    monthlyCosts().then((res: any) => {
-      const data = res.data.data[0].monthlycost;
-      setMonontly(data);
+    monthlycost().then((res) => {
+      const data = res.data[0].monthlycost
+      setMonthlyCost(data || 0)
+    })
+
+    weeklycost().then((res: any) => {
+      const data = res.data[0].weeklycost;
+      setWeeklyCost(data || 0);
     });
 
-    weeklyCosts().then((res: any) => {
-      const data = res.data.data[0].weeklycost;
-      setWeekly(data);
-    });
-
-    dailyCosts().then((res: any) => {
-      const data = res.data.data[0].dailycost;
-      setDaily(data)
+    dailycost().then((res: any) => {
+      const data = res.data[0].dailycost;
+      setDailyCost(data || 0)
     });
   }, []);
-
-  const monthlyCosts = async () => {
-    try {
-      const data = await axios.get(
-        "http://localhost:3030/checkouts/monthly_material_cost"
-      );
-      return data;
-    } catch (err) {
-      return err;
-    }
-  };
-  const weeklyCosts = async () => {
-    try {
-      const data = await axios.get(
-        "http://localhost:3030/checkouts/weekly_material_cost"
-      );
-      return data;
-    } catch (err) {
-      return err;
-    }
-  };
-  const dailyCosts = async () => {
-    try {
-      const data = await axios.get(
-        "http://localhost:3030/checkouts/daily_material_cost"
-      );
-      return data;
-    } catch (err) {
-      return err;
-    }
-  };
 
   const dailyDetailedCosts = {
     labels: ["January", "February", "March", "April", "May"],

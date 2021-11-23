@@ -1,19 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
-export default function (
-  request: NextApiRequest,
-  response: NextApiResponse & Response
-) {
-  axios
-    .get("http://localhost:3030/checkouts/monthly_material_cost")
-    .then((res) => response.status(200).json({ data: res.data.data[0] }))
-    .catch((e) => e.message);
-}
-
-
-export const config = {
-  api: {
-    externalResolver: true,
-  },
+export default async function monthlycost() {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_TUZIMBE_API_URL}/checkouts/monthly_material_cost`
+    );
+    return response.data;
+  } catch (err) {
+    return err
+  }
 }
